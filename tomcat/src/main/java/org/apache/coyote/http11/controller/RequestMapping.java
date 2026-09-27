@@ -11,9 +11,9 @@ public class RequestMapping {
             ((request, response) -> response.sendError(HttpStatus.NOT_FOUND));
 
     private final Map<String, Controller> controllers = new HashMap<>();
-    private final Controller staticResourceController;
+    private final StaticResourceController staticResourceController;
 
-    public RequestMapping(Controller staticResourceController) {
+    public RequestMapping(StaticResourceController staticResourceController) {
         this.staticResourceController = staticResourceController;
     }
 
@@ -31,14 +31,10 @@ public class RequestMapping {
             return controller;
         }
 
-        if (isStaticResource(path)) {
+        if (staticResourceController.supports(path)) {
             return staticResourceController;
         }
-
         return NOT_FOUND;
     }
 
-    private boolean isStaticResource(String path) {
-        return path.endsWith(".html") || path.endsWith(".css") || path.endsWith(".js");
-    }
 }

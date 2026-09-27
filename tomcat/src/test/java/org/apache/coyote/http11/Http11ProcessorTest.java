@@ -18,7 +18,6 @@ class Http11ProcessorTest {
 
     private SessionManager sessionManager;
     private Session session;
-    private StaticResourceController staticResourceController;
     private RequestMapping mapping;
     private SessionResolver sessionResolver;
 
@@ -28,7 +27,7 @@ class Http11ProcessorTest {
         session = new Session("test-session-id");
         sessionManager.add(session);
 
-        staticResourceController = new StaticResourceController("static");
+        StaticResourceController staticResourceController = new StaticResourceController("static");
         mapping = new RequestMapping(staticResourceController);
         mapping.register("/", new HomeController());
 

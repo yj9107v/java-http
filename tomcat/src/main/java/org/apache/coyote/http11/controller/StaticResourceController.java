@@ -2,11 +2,18 @@ package org.apache.coyote.http11.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import org.apache.coyote.http11.HttpRequest;
 import org.apache.coyote.http11.HttpResponse;
 import org.apache.coyote.http11.HttpStatus;
 
 public class StaticResourceController extends AbstractController {
+
+    private static final Map<String, String> CONTENT_TYPES = Map.of(
+            ".html", "text/html;charset=utf-8",
+            ".css", "text/css",
+            ".js", "text/javascript"
+    );
 
     private final String resourceRoot;
 
@@ -39,13 +46,23 @@ public class StaticResourceController extends AbstractController {
         }
     }
 
+    public boolean supports(String path) {
+        return CONTENT_TYPES.containsKey(extension(path));
+    }
+
     private String contentType(String path) {
-        if (path.endsWith(".css")) {
-            return "text/css";
+        return CONTENT_TYPES.getOrDefault(
+                extension(path),
+                "text/html;charset=utf-8"
+        );
+    }
+
+    private static String extension(String path) {
+        int dot = path.lastIndexOf('.');
+
+        if (dot < 0) {
+            return "";
         }
-        if (path.endsWith(".js")) {
-            return "text/javascript";
-        }
-        return "text/html;charset=utf-8";
+        return path.substring(dot);
     }
 }
