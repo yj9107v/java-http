@@ -9,7 +9,7 @@ public class HttpCookie {
     private final Map<String, String> values;
 
     public HttpCookie(Map<String, String> values) {
-        this.values = values;
+        this.values = Map.copyOf(values);
     }
 
     public static HttpCookie parse(String cookieHeader) {
@@ -26,7 +26,7 @@ public class HttpCookie {
                 values.put(parts[0].trim(), parts[1].trim());
             }
         }
-        
+
         return new HttpCookie(values);
     }
 
